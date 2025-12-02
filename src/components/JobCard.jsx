@@ -8,9 +8,12 @@ const JobCard = ({ job, onClick }) => {
         >
             <div className="flex-shrink-0">
                 <img
-                    src={job.logo_url}
+                    src={job.logo_url || 'https://via.placeholder.com/150'}
                     alt={`${job.company} logo`}
                     className="w-12 h-12 rounded-full object-cover"
+                    onError={(e) => {
+                        e.target.src = 'https://via.placeholder.com/150';
+                    }}
                 />
             </div>
             <div className="flex-grow">
@@ -27,11 +30,13 @@ const JobCard = ({ job, onClick }) => {
                     </span>
                     <span className="bg-gray-300 h-7 w-0.5"></span>
                     <span className="px-3 py-1 text-xs font-medium text-yellow-600 bg-yellow-50 rounded-full border border-yellow-200">
-                        {job.categories[0]}
+                        {job.categories && job.categories[0] ? job.categories[0] : 'General'}
                     </span>
-                    <span className="px-3 py-1 text-xs font-medium text-purple-600 bg-purple-50 rounded-full border border-purple-200">
-                        {job.categories[1] || "IT"}
-                    </span>
+                    {job.categories && job.categories[1] && (
+                        <span className="px-3 py-1 text-xs font-medium text-purple-600 bg-purple-50 rounded-full border border-purple-200">
+                            {job.categories[1]}
+                        </span>
+                    )}
                 </div>
             </div>
         </div>

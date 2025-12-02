@@ -24,26 +24,34 @@ const ApplicantDashboard = ({ job, onBack }) => {
 
                     <section className="mb-8">
                         <h2 className="text-2xl font-black text-gray-900 mb-4">Responsibilities</h2>
-                        <ul className="space-y-3">
-                            {job.responsibilities.map((item, index) => (
-                                <li key={index} className="flex items-start gap-3 text-gray-600">
-                                    <CheckCircle2 className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                                    <span>{item}</span>
-                                </li>
-                            ))}
-                        </ul>
+                        {job.responsibilities && job.responsibilities.length > 0 ? (
+                            <ul className="space-y-3">
+                                {job.responsibilities.map((item, index) => (
+                                    <li key={index} className="flex items-start gap-3 text-gray-600">
+                                        <CheckCircle2 className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
+                                        <span>{item}</span>
+                                    </li>
+                                ))}
+                            </ul>
+                        ) : (
+                            <p className="text-gray-500 italic">No responsibilities listed</p>
+                        )}
                     </section>
 
                     <section className="mb-8">
                         <h2 className="text-2xl font-black text-gray-900 mb-4">Ideal Candidate we want</h2>
-                        <ul className="space-y-3">
-                            {job.ideal_candidate.map((item, index) => (
-                                <li key={index} className="flex items-start gap-3 text-gray-600">
-                                    <span className="text-gray-900 font-black">•</span>
-                                    <span>{item}</span>
-                                </li>
-                            ))}
-                        </ul>
+                        {job.ideal_candidate && job.ideal_candidate.length > 0 ? (
+                            <ul className="space-y-3">
+                                {job.ideal_candidate.map((item, index) => (
+                                    <li key={index} className="flex items-start gap-3 text-gray-600">
+                                        <span className="text-gray-900 font-black">•</span>
+                                        <span>{item}</span>
+                                    </li>
+                                ))}
+                            </ul>
+                        ) : (
+                            <p className="text-gray-500 italic">No ideal candidate information available</p>
+                        )}
                     </section>
 
                     <section className="mb-8">
@@ -110,24 +118,32 @@ const ApplicantDashboard = ({ job, onBack }) => {
 
                     <section>
                         <h3 className="text-xl font-black text-gray-900 mb-4 border-b pb-2">Categories</h3>
-                        <div className="flex flex-wrap gap-2">
-                            {job.categories.map((cat, index) => (
-                                <span key={index} className={`px-3 py-1 text-xs font-medium rounded-full ${index % 2 === 0 ? 'text-yellow-600 bg-yellow-50' : 'text-green-600 bg-green-50'}`}>
-                                    {cat}
-                                </span>
-                            ))}
-                        </div>
+                        {job.categories && job.categories.length > 0 ? (
+                            <div className="flex flex-wrap gap-2">
+                                {job.categories.map((cat, index) => (
+                                    <span key={index} className={`px-3 py-1 text-xs font-medium rounded-full ${index % 2 === 0 ? 'text-yellow-600 bg-yellow-50' : 'text-green-600 bg-green-50'}`}>
+                                        {cat}
+                                    </span>
+                                ))}
+                            </div>
+                        ) : (
+                            <p className="text-gray-500 italic text-sm">No categories specified</p>
+                        )}
                     </section>
 
                     <section>
                         <h3 className="text-xl font-black text-gray-900 mb-4 border-b pb-2">Required Skills</h3>
-                        <div className="flex flex-wrap gap-2">
-                            {job.required_skills.map((skill, index) => (
-                                <span key={index} className="px-3 py-1 text-xs font-medium text-blue-600 bg-blue-50 rounded-full">
-                                    {skill}
-                                </span>
-                            ))}
-                        </div>
+                        {job.required_skills && job.required_skills.length > 0 ? (
+                            <div className="flex flex-wrap gap-2">
+                                {job.required_skills.map((skill, index) => (
+                                    <span key={index} className="px-3 py-1 text-xs font-medium text-blue-600 bg-blue-50 rounded-full">
+                                        {skill}
+                                    </span>
+                                ))}
+                            </div>
+                        ) : (
+                            <p className="text-gray-500 italic text-sm">No required skills specified</p>
+                        )}
                     </section>
                 </div>
             </div>
