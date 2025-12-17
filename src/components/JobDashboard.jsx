@@ -1,15 +1,18 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import JobCard from './JobCard';
-import { fetchOpportunities } from '../services/apiService';
-import { ChevronDown, Loader2, AlertCircle } from 'lucide-react';
+import { fetchOpportunities, isAuthenticated, clearAuthToken } from '../services/apiService';
+import { ChevronDown, Loader2, AlertCircle, User } from 'lucide-react';
 
 const JobDashboard = ({ onJobClick }) => {
     const [jobs, setJobs] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     useEffect(() => {
         loadOpportunities();
+        setIsLoggedIn(isAuthenticated());
     }, []);
 
     const loadOpportunities = async () => {
@@ -24,6 +27,11 @@ const JobDashboard = ({ onJobClick }) => {
         } finally {
             setLoading(false);
         }
+    };
+
+    const handleLogout = () => {
+        clearAuthToken();
+        setIsLoggedIn(false);
     };
 
     if (loading) {
@@ -80,17 +88,53 @@ const JobDashboard = ({ onJobClick }) => {
 
     return (
         <div className="max-w-5xl mx-auto p-8">
+            {/* Header with Auth Links */}
             <div className="flex justify-between items-center mb-8">
                 <div>
                     <h1 className="text-3xl font-black text-gray-900">Opportunities</h1>
                     <p className="text-gray-500 text-sm mt-1">Showing {jobs.length} results</p>
                 </div>
-                <div className="text-sm text-gray-500 flex items-center justify-between gap-2">
-                    Sort by: <span className="font-medium text-gray-900">Most relevant</span>
-                    <ChevronDown className="w-4 h-4 text-gray-500 mr-2 font-medium " />
-                    <span className="bg-gray-300 h-6 w-px"></span>
-                </div>
 
+                {/* Auth buttons */}
+                <div className="flex items-center gap-3">
+                    {isLoggedIn ? (
+                        <div className="flex items-center gap-3">
+                            <div className="flex items-center gap-2 px-3 py-2 bg-indigo-50 rounded-lg">
+                                <User className="w-4 h-4 text-indigo-600" />
+                                <span className="text-sm text-indigo-600 font-medium">Logged In</span>
+                            </div>
+                            <button
+                                onClick={handleLogout}
+                                className="px-4 py-2 text-sm font-medium text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors"
+                            >
+                                Logout
+                            </button>
+                        </div>
+                    ) : (
+                        <>
+                            <Link
+                                to="/signin"
+                                className="px-4 py-2 text-sm font-medium text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50 rounded-lg transition-colors"
+                            >
+                                Sign In
+                            </Link>
+                            <Link
+                                to="/signup"
+                                className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg transition-colors"
+                            >
+                                Sign Up
+                            </Link>
+                        </>
+                    )}
+                </div>
+            </div>
+
+            {/* Sort bar */}
+            <div className="flex justify-between items-center mb-6">
+                <div className="text-sm text-gray-500 flex items-center gap-2">
+                    Sort by: <span className="font-medium text-gray-900">Most relevant</span>
+                    <ChevronDown className="w-4 h-4 text-gray-500" />
+                </div>
             </div>
 
             <div className="space-y-4">
@@ -103,3 +147,4 @@ const JobDashboard = ({ onJobClick }) => {
 };
 
 export default JobDashboard;
+

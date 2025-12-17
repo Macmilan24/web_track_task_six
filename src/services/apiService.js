@@ -106,3 +106,116 @@ export const fetchOpportunityById = async (id) => {
     throw error;
   }
 };
+
+// ==================== Authentication API Functions ====================
+
+
+export const signup = async (name, email, password, confirmPassword, role = 'user') => {
+  try {
+    const response = await fetch(`${BASE_URL}/signup`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        name,
+        email,
+        password,
+        confirmPassword,
+        role,
+      }),
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw new Error(result.message || 'Failed to sign up');
+    }
+
+    return result;
+  } catch (error) {
+    console.error('Error during signup:', error);
+    throw error;
+  }
+};
+
+
+export const verifyEmail = async (email, otp) => {
+  try {
+    const response = await fetch(`${BASE_URL}/verify-email`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email,
+        OTP: otp,
+      }),
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw new Error(result.message || 'Failed to verify email');
+    }
+
+    return result;
+  } catch (error) {
+    console.error('Error during email verification:', error);
+    throw error;
+  }
+};
+
+
+export const login = async (email, password) => {
+  try {
+    const response = await fetch(`${BASE_URL}/login`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email,
+        password,
+      }),
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw new Error(result.message || 'Failed to log in');
+    }
+
+    // Save token if login successful
+    if (result.success && result.data?.accessToken) {
+      saveAuthToken(result.data.accessToken);
+    }
+
+    return result;
+  } catch (error) {
+    console.error('Error during login:', error);
+    throw error;
+  }
+};
+
+// ==================== Token Management ====================
+
+const TOKEN_KEY = 'auth_token';
+
+
+export const saveAuthToken = (token) => {
+  localStorage.setItem(TOKEN_KEY, token);
+};
+
+
+export const getAuthToken = () => {
+  return localStorage.getItem(TOKEN_KEY);
+};
+
+export const clearAuthToken = () => {
+  localStorage.removeItem(TOKEN_KEY);
+};
+
+export const isAuthenticated = () => {
+  return !!getAuthToken();
+};
